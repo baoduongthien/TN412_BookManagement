@@ -1,17 +1,15 @@
 
-import Container from 'react-bootstrap/Container';
-
 import Header from './Header';
 import Footer from './Footer';
 
 function HomeLayout({ children }) {
     return (
-        <div>
+        <div className="d-flex flex-column vh-100">
             <Header />
 
-            <Container>
+            <div className="flex-grow-1 d-flex">
                 {children}
-            </Container>
+            </div>
 
             <Footer />
         </div>

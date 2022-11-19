@@ -22,7 +22,11 @@ export const loginUser = async (user, dispatch, navigate) => {
 
         dispatch(loginSuccess(res));
 
-        navigate('/');
+        if (res.roles.some(role => role === 'ROLE_ADMIN')) {
+            navigate('/admin')
+        } else {
+            navigate('/');
+        }
     } catch(error) {
         dispatch(loginFailed());
     }
