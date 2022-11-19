@@ -40,6 +40,12 @@ export const registerUser = async (user, dispatch, navigate) => {
             })
         ).json();
 
+        if (res.message.includes('Error')) {
+            alert(res.message);
+            throw new Error(res.message);
+        }
+
+        alert('Đăng ký thành công!');
         dispatch(registerSuccess(res));
 
         navigate('/login');

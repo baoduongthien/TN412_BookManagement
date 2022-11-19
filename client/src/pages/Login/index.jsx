@@ -5,6 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 
+import isEmpty from 'validator/lib/isEmpty';
+
 import styles from './Login.module.css';
 import { loginUser } from '../../redux/apiRequest';
 
@@ -12,6 +14,11 @@ function Login() {
 
     const [ userName, setUserName ] = useState('');
     const [ password, setPassword ] = useState('');
+    const [ validationMsg, setValidationMsg ] = useState({
+        userName: [],
+        password: [],
+        ok: true,
+    });
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -19,12 +26,35 @@ function Login() {
     function handleSubmit(e) {
         e.preventDefault();
 
+        if (!isValid()) {
+            return;
+        }
+        
         const user = {
             username: userName,
             password: password,
         };
-
         loginUser(user, dispatch, navigate);
+    }
+
+    function isValid() {
+        const msg = {
+            userName: [],
+            password: [],
+            ok: true,
+        };
+        if (isEmpty(userName)) {
+            msg.userName.push('Tên người dùng không được bỏ trống');
+            msg.ok = false;
+        }
+        if (isEmpty(password)) {
+            msg.password.push('Mật khẩu không được bỏ trống');
+            msg.ok = false;
+        }
+
+        setValidationMsg(msg);
+        
+        return msg.ok === true;
     }
 
     return (
@@ -45,6 +75,7 @@ function Login() {
                         value={userName}
                         onChange={e => setUserName(e.target.value)}
                     ></Form.Control>
+                    {validationMsg?.userName?.map((username, index) => <p key={index} className="text-danger">{username}</p>)}
                 </Form.Group>
 
                 <Form.Group className="mb-3">
@@ -55,6 +86,7 @@ function Login() {
                         value={password} 
                         onChange={e => setPassword(e.target.value)}
                     ></Form.Control>
+                    {validationMsg?.password?.map((pass, index) => <p key={index} className="text-danger">{pass}</p>)}
                 </Form.Group>
                 
                 <Button variant="primary" type="submit">
