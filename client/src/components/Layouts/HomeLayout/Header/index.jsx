@@ -27,7 +27,7 @@ function Header() {
 
                         <div className="d-flex">
                             <Nav.Link as={Link} to="/">Home</Nav.Link>
-                            { user?.roles.some(role => role === 'ROLE_ADMIN') ? <Nav.Link as={Link} to="/Admin">Dashboard</Nav.Link> : null }
+                            { user?.roles.some(role => role === 'admin') ? <Nav.Link as={Link} to="/Admin">Dashboard</Nav.Link> : null }
                         </div>
 
                         <div className="d-flex">

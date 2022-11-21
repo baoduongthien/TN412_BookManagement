@@ -24,7 +24,7 @@ function PrivateRoute({ children }) {
 
     let isAuthenticated = false;
     if (currentUser) {
-        isAuthenticated = currentUser.roles.some(role => role === 'ROLE_ADMIN');
+        isAuthenticated = currentUser.roles.some(role => role === 'admin');
     }
 
     return isAuthenticated ? children : <Navigate to="/login" />;

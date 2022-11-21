@@ -1,4 +1,4 @@
-package com.nhom8.repository;
+package com.nhom8.services;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.nhom8.models.Author;
 
 @Repository
-public interface AuthorRepository extends JpaRepository<Author, Long> {
-
+public interface AuthorService extends JpaRepository<Author, Long> {
+    
 }
