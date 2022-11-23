@@ -5,12 +5,16 @@ import java.util.Set;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 @Entity
-@Table(name = "categories", uniqueConstraints = { @UniqueConstraint(columnNames = "name") })
+@Table(name = "categories")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 40)
     private String name;
@@ -21,17 +25,17 @@ public class Category {
     public Category() {
     }
 
-    public Category(Integer id, String name, Set<Book> books) {
+    public Category(Long id, String name, Set<Book> books) {
         this.id = id;
         this.name = name;
         this.books = books;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

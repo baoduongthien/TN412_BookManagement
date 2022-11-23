@@ -15,30 +15,30 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nhom8.models.Author;
-import com.nhom8.services.AuthorService;
+import com.nhom8.models.Category;
+import com.nhom8.services.CategoryService;
 
 @RestController
-public class AuthorController {
+public class CategoryController {
     
     @Autowired
-    private AuthorService authorService;
+    private CategoryService categoryService;
 
     @PreAuthorize("hasAuthority('admin')")
-    @GetMapping("/api/authors")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    @GetMapping("/api/categories")
+    public ResponseEntity<List<Category>> getAllCategories() {
         try {
-            return ResponseEntity.ok(authorService.findAll());
+            return ResponseEntity.ok(categoryService.findAll());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @PostMapping("/api/author")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author req) {
+    @PostMapping("/api/category")
+    public ResponseEntity<Category> createCategory(@Valid @RequestBody Category req) {
         try {
-            authorService.save(req);
+            categoryService.save(req);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -46,40 +46,40 @@ public class AuthorController {
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @GetMapping("/api/author/{id}")
-    public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
+    @GetMapping("/api/category/{id}")
+    public ResponseEntity<Category> getCategory(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
+            Optional<Category> optionalCategory = categoryService.findById(id);
+            Category category = optionalCategory.get();
 
-            return ResponseEntity.ok(author);
+            return ResponseEntity.ok(category);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @PutMapping("/api/author/{id}")
-    public ResponseEntity<Author> editAuthor(@PathVariable Long id, @Valid @RequestBody Author req) {
+    @PutMapping("/api/category/{id}")
+    public ResponseEntity<Category> editCategory(@PathVariable Long id, @Valid @RequestBody Category req) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
-            author.setName(req.getName());
+            Optional<Category> optionalCategory = categoryService.findById(id);
+            Category category = optionalCategory.get();
+            category.setName(req.getName());
             
-            return ResponseEntity.ok(authorService.save(author));
+            return ResponseEntity.ok(categoryService.save(category));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @DeleteMapping("/api/author/{id}")
-    public ResponseEntity<Author> deleteAuthor(@PathVariable Long id) {
+    @DeleteMapping("/api/category/{id}")
+    public ResponseEntity<Category> deleteCategory(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
+            Optional<Category> optionalCategory = categoryService.findById(id);
+            Category category = optionalCategory.get();
             
-            authorService.delete(author);
+            categoryService.delete(category);
             
             return ResponseEntity.ok().build();
         } catch (Exception e) {

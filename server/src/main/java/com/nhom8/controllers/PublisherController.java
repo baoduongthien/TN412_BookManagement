@@ -15,30 +15,30 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nhom8.models.Author;
-import com.nhom8.services.AuthorService;
+import com.nhom8.models.Publisher;
+import com.nhom8.services.PublisherService;
 
 @RestController
-public class AuthorController {
+public class PublisherController {
     
     @Autowired
-    private AuthorService authorService;
+    private PublisherService publisherService;
 
     @PreAuthorize("hasAuthority('admin')")
-    @GetMapping("/api/authors")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    @GetMapping("/api/publishers")
+    public ResponseEntity<List<Publisher>> getAllCategories() {
         try {
-            return ResponseEntity.ok(authorService.findAll());
+            return ResponseEntity.ok(publisherService.findAll());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @PostMapping("/api/author")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author req) {
+    @PostMapping("/api/publisher")
+    public ResponseEntity<Publisher> createPublisher(@Valid @RequestBody Publisher req) {
         try {
-            authorService.save(req);
+            publisherService.save(req);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
@@ -46,40 +46,40 @@ public class AuthorController {
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @GetMapping("/api/author/{id}")
-    public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
+    @GetMapping("/api/publisher/{id}")
+    public ResponseEntity<Publisher> getPublisher(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
+            Optional<Publisher> optionalPublisher = publisherService.findById(id);
+            Publisher publisher = optionalPublisher.get();
 
-            return ResponseEntity.ok(author);
+            return ResponseEntity.ok(publisher);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @PutMapping("/api/author/{id}")
-    public ResponseEntity<Author> editAuthor(@PathVariable Long id, @Valid @RequestBody Author req) {
+    @PutMapping("/api/publisher/{id}")
+    public ResponseEntity<Publisher> editPublisher(@PathVariable Long id, @Valid @RequestBody Publisher req) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
-            author.setName(req.getName());
+            Optional<Publisher> optionalPublisher = publisherService.findById(id);
+            Publisher publisher = optionalPublisher.get();
+            publisher.setName(req.getName());
             
-            return ResponseEntity.ok(authorService.save(author));
+            return ResponseEntity.ok(publisherService.save(publisher));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PreAuthorize("hasAuthority('admin')")
-    @DeleteMapping("/api/author/{id}")
-    public ResponseEntity<Author> deleteAuthor(@PathVariable Long id) {
+    @DeleteMapping("/api/publisher/{id}")
+    public ResponseEntity<Publisher> deletePublisher(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
+            Optional<Publisher> optionalPublisher = publisherService.findById(id);
+            Publisher publisher = optionalPublisher.get();
             
-            authorService.delete(author);
+            publisherService.delete(publisher);
             
             return ResponseEntity.ok().build();
         } catch (Exception e) {
