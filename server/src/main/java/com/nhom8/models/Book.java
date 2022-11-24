@@ -7,7 +7,7 @@ import javax.persistence.*;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(length = 40)
     private String name;
@@ -24,13 +24,13 @@ public class Book {
     private Category category;
 
     @ManyToOne
-    @JoinColumn(name = "publisher")
+    @JoinColumn(name = "publisher_id")
     private Publisher publisher;
 
     public Book() {
     }
 
-    public Book(Integer id, String name, String thumbnail, Author author, Category category, Publisher publisher) {
+    public Book(Long id, String name, String thumbnail, Author author, Category category, Publisher publisher) {
         this.id = id;
         this.name = name;
         this.thumbnail = thumbnail;
@@ -39,11 +39,11 @@ public class Book {
         this.publisher = publisher;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
