@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 
 import styles from './Sidebar.module.css';
-import { logoutUser } from '../../../../redux/apiRequest';
+import { logoutUser } from '../../../../redux/authRequest';
 
 function Sidebar() {
 

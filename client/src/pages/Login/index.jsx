@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux';
 import isEmpty from 'validator/lib/isEmpty';
 
 import styles from './Login.module.css';
-import { loginUser } from '../../redux/apiRequest';
+import { loginUser } from '../../redux/authRequest';
 
 function Login() {
 

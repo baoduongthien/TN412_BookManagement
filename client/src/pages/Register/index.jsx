@@ -8,7 +8,7 @@ import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
 
 import styles from './Register.module.css';
-import { registerUser } from '../../redux/apiRequest';
+import { registerUser } from '../../redux/authRequest';
 
 function Register() {
 
