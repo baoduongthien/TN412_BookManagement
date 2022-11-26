@@ -1,32 +1,47 @@
 
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-
-import styles from './Sidebar.module.css';
-import { logoutUser } from '../../../../redux/authRequest';
+import { Link } from 'react-router-dom';
 
 function Sidebar() {
 
-    const user = useSelector(state => state.auth.login.currentUser);
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
-    function handleLogout() {
-        logoutUser(dispatch, navigate);
-    }
-
     return (
-    <div className={styles.wrapper}>
-        <div>
+        <div className="container-fluid">
+            <div className="row">
+                <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                    <div className="position-sticky pt-3 sidebar-sticky">
+                        <ul className="nav flex-column">
+                            <li className="nav-item">
+                                <Link className="nav-link active" to="/admin">
+                                    Bảng điều khiển
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/admin/authors">
+                                    Tác giả
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/admin/categories">
+                                    Danh mục
+                                </Link>
+                            </li>
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/admin/publishers">
+                                    Nhà xuất bản
+                                </Link>
+                            </li>
 
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/admin/books">
+                                    Sách
+                                </Link>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+
+            </div>
         </div>
-        <div className={styles.navbar}>
-            <Link to="/">Trang chủ</Link>
-            <Link to="/categories">Danh mục</Link>
-            <Link to="/books">Sách</Link>
-        </div>
-    </div>
     );
 }
 

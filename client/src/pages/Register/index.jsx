@@ -1,7 +1,7 @@
 
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useState, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import isEmail from 'validator/lib/isEmail';
 import isLength from 'validator/lib/isLength';
 
@@ -10,21 +10,22 @@ import { registerUser } from '../../redux/authRequest';
 
 function Register() {
 
-    const [ userName, setUserName ] = useState('');
-    const [ password, setPassword ] = useState('');
-    const [ email, setEmail ] = useState('');
-    const [ confirmPassword, setConfirmPassword ] = useState('');
-    
-    const [ userNameMessage, setUserNameMessage ] = useState(null);
-    const [ passwordMessage, setPasswordMessage ] = useState(null);
-    const [ emailMessage, setEmailMessage ] = useState(null);
-    const [ confirmPasswordMessage, setConfirmPasswordMessage ] = useState(null);
-    
+    const [userName, setUserName] = useState('');
+    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const [userNameMessage, setUserNameMessage] = useState(null);
+    const [passwordMessage, setPasswordMessage] = useState(null);
+    const [emailMessage, setEmailMessage] = useState(null);
+    const [confirmPasswordMessage, setConfirmPasswordMessage] = useState(null);
+
     const passwordRef = useRef();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const currentUser = useSelector(state => state.auth.login.currentUser);
 
     // validate
     function validateEmail(value) {
@@ -34,7 +35,7 @@ function Register() {
             setEmailMessage('');
         }
     }
-    
+
     function validateUserName(value) {
         if (!isLength(value, 3, 20)) {
             setUserNameMessage('Tên người dùng phải từ 3 - 20 kí tự!');
@@ -43,13 +44,13 @@ function Register() {
         }
     }
 
-    function validatePassword(value) {        
+    function validatePassword(value) {
         if (!isLength(value, 6, 40)) {
             setPasswordMessage('Mật khẩu phải từ 6 - 40 kí tự!');
         } else {
             setPasswordMessage('');
         }
-        
+
         validateConfirmPassword(confirmPassword);
     }
 
@@ -71,7 +72,7 @@ function Register() {
     // handle
     function handleSubmit(e) {
         e.preventDefault();
-        
+
         if (!isValid()) {
             validateEmail(email);
             validateUserName(userName);
@@ -84,84 +85,88 @@ function Register() {
             username: userName,
             password: password,
             email: email,
-            role: [ 'user' ],
+            role: ['user'],
         };
 
         registerUser(user, dispatch, navigate);
     }
 
     return (
-        <div className={styles.wrapper}>
-            <div class="p-4">
-                <h2 className="text-center">ĐĂNG KÝ</h2>
-                <span>Bạn đã có tài khoản?</span>
-                <br />
-                <span className="text-center">Đăng nhập tại <Link to="/login">đây</Link></span>
-            </div>
+        <>
+            {currentUser ? <Navigate to="/" /> : (
+                <div className={styles.wrapper}>
+                    <div className="p-4">
+                        <h2 className="text-center">ĐĂNG KÝ</h2>
+                        <span>Bạn đã có tài khoản?</span>
+                        <br />
+                        <span className="text-center">Đăng nhập tại <Link to="/login">đây</Link></span>
+                    </div>
 
-            <form class="flex-fill p-2" onSubmit={(e) => handleSubmit(e)}>
+                    <form className="flex-fill p-2" onSubmit={(e) => handleSubmit(e)}>
 
-                <div class="form-group mt-2">
-                    <label htmlFor="email">Email</label>
-                    <input 
-                        type="email" 
-                        class="form-control" 
-                        id="email"
-                        placeholder="Nhập email...."
-                        value={email}
-                        onChange={(e) => { setEmail(e.target.value); validateEmail(e.target.value) }} 
-                        onBlur={(e) => validateEmail(e.target.value)}
-                    />
-                    <p class="text-danger">{emailMessage}</p>
+                        <div className="form-group mt-2">
+                            <label htmlFor="email">Email</label>
+                            <input
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                placeholder="Nhập email...."
+                                value={email}
+                                onChange={(e) => { setEmail(e.target.value); validateEmail(e.target.value) }}
+                                onBlur={(e) => validateEmail(e.target.value)}
+                            />
+                            <p className="text-danger">{emailMessage}</p>
+                        </div>
+
+                        <div className="form-group mt-2">
+                            <label htmlFor="username">Tên người dùng</label>
+                            <input
+                                type="text"
+                                className="form-control"
+                                id="username"
+                                placeholder="Nhập tên người dùng...."
+                                value={userName}
+                                onChange={(e) => { setUserName(e.target.value); validateUserName(e.target.value) }}
+                                onBlur={(e) => validateUserName(e.target.value)}
+                            />
+                            <p className="text-danger">{userNameMessage}</p>
+                        </div>
+
+                        <div className="form-group mt-2">
+                            <label htmlFor="passowrd">Mật khẩu</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="password"
+                                placeholder="Nhập mật khẩu..."
+                                value={password}
+                                ref={passwordRef}
+                                onChange={(e) => { setPassword(e.target.value); validatePassword(e.target.value) }}
+                                onBlur={(e) => validatePassword(e.target.value)}
+                            />
+                            <p className="text-danger">{passwordMessage}</p>
+                        </div>
+
+                        <div className="form-group mt-2">
+                            <label htmlFor="confirm-passowrd">Xác nhận mật khẩu</label>
+                            <input
+                                type="password"
+                                className="form-control"
+                                id="confirm-passowrd"
+                                placeholder="Nhập lại mật khẩu..."
+                                value={confirmPassword}
+                                onChange={(e) => { setConfirmPassword(e.target.value); validateConfirmPassword(e.target.value) }}
+                                onBlur={(e) => validateConfirmPassword(e.target.value)}
+                            />
+                            <p className="text-danger">{confirmPasswordMessage}</p>
+                        </div>
+
+                        <button type="submit" className="btn btn-primary mt-2">Đăng ký</button>
+
+                    </form>
                 </div>
-
-                <div class="form-group mt-2">
-                    <label htmlFor="username">Tên người dùng</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="username"
-                        placeholder="Nhập tên người dùng...."
-                        value={userName}
-                        onChange={(e) => { setUserName(e.target.value); validateUserName(e.target.value) }} 
-                        onBlur={(e) => validateUserName(e.target.value)}
-                    />
-                    <p class="text-danger">{userNameMessage}</p>
-                </div>
-
-                <div class="form-group mt-2">
-                    <label htmlFor="passowrd">Mật khẩu</label>
-                    <input 
-                        type="password" 
-                        class="form-control" 
-                        id="password" 
-                        placeholder="Nhập mật khẩu..."
-                        value={password}
-                        ref={passwordRef}
-                        onChange={(e) => { setPassword(e.target.value); validatePassword(e.target.value) }}
-                        onBlur={(e) => validatePassword(e.target.value)}
-                    />
-                    <p class="text-danger">{passwordMessage}</p>
-                </div>
-
-                <div class="form-group mt-2">
-                    <label htmlFor="confirm-passowrd">Xác nhận mật khẩu</label>
-                    <input 
-                        type="password" 
-                        class="form-control" 
-                        id="confirm-passowrd" 
-                        placeholder="Nhập lại mật khẩu..."
-                        value={confirmPassword}
-                        onChange={(e) => { setConfirmPassword(e.target.value); validateConfirmPassword(e.target.value) }}
-                        onBlur={(e) => validateConfirmPassword(e.target.value)}
-                    />
-                    <p class="text-danger">{confirmPasswordMessage}</p>
-                </div>
-
-                <button type="submit" class="btn btn-primary mt-2">Đăng ký</button>
-
-            </form>
-        </div>
+            )}
+        </>
     );
 }
 
