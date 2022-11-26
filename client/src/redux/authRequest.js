@@ -1,34 +1,32 @@
 
+import axios from 'axios';
+
 import { loginFailed, loginStart, loginSuccess } from "./authSlice";
 import { registerFailed, registerStart, registerSuccess } from "./authSlice";
 import { logoutFailed, logoutStart, logoutSuccess } from "./authSlice";
 
+const URL_LOGIN = 'http://localhost:8080/api/auth/signin';
+const URL_REGISTER = 'http://localhost:8080/api/auth/signup';
+const URL_LOGOUT = 'http://localhost:8080/api/auth/logout';
+
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const URL = 'http://localhost:8080/api/auth/signin';
-        const res = await (await fetch(
-            URL, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user) 
-            })
-        ).json();
-
-        if (!res.accessToken) {
-            alert('Tên tài khoản hoặc mật khẩu không chính xác');
-            throw new Error(res.error);
-        }
+        const res = (await axios.post(URL_LOGIN, user)).data;
 
         dispatch(loginSuccess(res));
 
-        console.log(res.roles);
         if (res.roles.some(role => role === 'admin')) {
             navigate('/admin');
         } else {
             navigate('/');
         }
     } catch(error) {
+        if (error.code === 'ERR_NETWORK') {
+            alert('Server chưa khởi động!');
+        } else {
+            alert('Tên tài khoản hoặc mật khẩu không chính xác');
+        }
         dispatch(loginFailed());
     }
 }
@@ -36,25 +34,18 @@ export const loginUser = async (user, dispatch, navigate) => {
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
-        const URL = 'http://localhost:8080/api/auth/signup';
-        const res = await (await fetch(
-            URL, { 
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(user) 
-            })
-        ).json();
-
-        if (res.message.includes('Error')) {
-            alert(res.message);
-            throw new Error(res.message);
-        }
-
+        const res = (await axios.post(URL_REGISTER, user)).data;
+        
         alert('Đăng ký thành công!');
         dispatch(registerSuccess(res));
 
         navigate('/login');
     } catch(error) {
+        if (error.code === 'ERR_NETWORK') {
+            alert('Server chưa khởi động!');
+        } else {
+            alert(error.response.data.message);
+        }
         dispatch(registerFailed());
     }
 }
@@ -62,8 +53,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const logoutUser = async (dispatch, navigate) => {
     dispatch(logoutStart());
     try {
-        const URL = 'http://localhost:8080/api/auth/logout';
-        const message = await (await fetch(URL, { method: 'POST' })).json();
+        const message = (await axios.post(URL_LOGOUT)).data;
 
         dispatch(logoutSuccess(message));
 

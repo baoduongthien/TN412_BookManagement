@@ -1,100 +1,108 @@
 
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-
 import isEmpty from 'validator/lib/isEmpty';
 
-import styles from './Login.module.css';
 import { loginUser } from '../../redux/authRequest';
+import styles from './Login.module.css';
 
 function Login() {
 
     const [ userName, setUserName ] = useState('');
     const [ password, setPassword ] = useState('');
-    const [ validationMsg, setValidationMsg ] = useState({
-        userName: [],
-        password: [],
-        ok: true,
-    });
+    const [ userNameMessage, setUserNameMessage ] = useState(null);
+    const [ passwordMessage, setPasswordMessage ] = useState(null);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    // validate
+    function validateUserName(userName) {
+        if (isEmpty(userName)) {
+            setUserNameMessage('Tên người dùng không được bỏ trống!');
+        } else {
+            setUserNameMessage('');
+        }
+    }
+
+    function validatePassword(password) {
+        if (isEmpty(password)) {
+            setPasswordMessage('Mật khẩu không được bỏ trống!');
+        } else {
+            setPasswordMessage('');
+        }
+    }
+
+    function isValid() {
+        if (userNameMessage === '' && passwordMessage === '') {
+            return true;
+        }
+        return false;
+    }
+
+    // handle
     function handleSubmit(e) {
         e.preventDefault();
 
         if (!isValid()) {
+            validateUserName(userName);
+            validatePassword(password);
             return;
         }
-        
+
         const user = {
             username: userName,
             password: password,
         };
+
         loginUser(user, dispatch, navigate);
     }
 
-    function isValid() {
-        const msg = {
-            userName: [],
-            password: [],
-            ok: true,
-        };
-        if (isEmpty(userName)) {
-            msg.userName.push('Tên người dùng không được bỏ trống');
-            msg.ok = false;
-        }
-        if (isEmpty(password)) {
-            msg.password.push('Mật khẩu không được bỏ trống');
-            msg.ok = false;
-        }
-
-        setValidationMsg(msg);
-        
-        return msg.ok === true;
-    }
-
     return (
-        <div className={styles.loginForm}>
-            <div>
+        <div className={styles.wrapper}>
+            <div class="p-4">
                 <h2 className="text-center">ĐĂNG NHẬP</h2>
                 <span>Bạn chưa có tài khoản?</span>
                 <br />
                 <span className="text-center">Đăng ký tại <Link to="/register">đây</Link></span>
             </div>
 
-            <Form className={styles.form} onSubmit={e => handleSubmit(e)}>
-                <Form.Group className="mb-3">
-                    <Form.Label>Tên đăng nhập</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Nhập tên đăng nhập..."
-                        value={userName}
-                        onChange={e => setUserName(e.target.value)}
-                    ></Form.Control>
-                    {validationMsg?.userName?.map((username, index) => <p key={index} className="text-danger">{username}</p>)}
-                </Form.Group>
+            <form class="flex-fill p-2" onSubmit={(e) => handleSubmit(e)}>
 
-                <Form.Group className="mb-3">
-                    <Form.Label>Mật khẩu</Form.Label>
-                    <Form.Control
-                        type="password"
-                        placeholder="Nhập mật khẩu..." 
-                        value={password} 
-                        onChange={e => setPassword(e.target.value)}
-                    ></Form.Control>
-                    {validationMsg?.password?.map((pass, index) => <p key={index} className="text-danger">{pass}</p>)}
-                </Form.Group>
-                
-                <Button variant="primary" type="submit">
-                    Đăng nhập
-                </Button>
-            </Form>
+                <div class="form-group mt-2">
+                    <label htmlFor="username">Tên người dùng</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="username"
+                        placeholder="Nhập tên người dùng...."
+                        value={userName}
+                        onChange={(e) => { setUserName(e.target.value); validateUserName(e.target.value) }} 
+                        onBlur={(e) => validateUserName(e.target.value)}
+                    />
+                    <p class="text-danger">{userNameMessage}</p>
+                </div>
+
+                <div class="form-group mt-2">
+                    <label htmlFor="passowrd">Mật khẩu</label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        id="password" 
+                        placeholder="Nhập mật khẩu..."
+                        value={password}
+                        onChange={(e) => { setPassword(e.target.value); validatePassword(e.target.value) }}
+                        onBlur={(e) => validatePassword(e.target.value)}
+                    />
+                    <p class="text-danger">{passwordMessage}</p>
+                </div>
+
+                <button type="submit" class="btn btn-primary mt-2">Đăng nhập</button>
+
+            </form>
         </div>
     );
 }
 
-export default Login;
+    export default Login;

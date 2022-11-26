@@ -1,5 +1,5 @@
 
-.loginForm {
+.wrapper {
     display: flex;
     align-items: center;
     width: 700px;
@@ -9,9 +9,4 @@
     box-shadow: 1px 1px 1px #ccc;
     border-radius: 10px;
     padding: 50px;
-}
-
-.form {
-    width: 300px;
-    margin: 0 auto;
 }

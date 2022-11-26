@@ -1,18 +1,12 @@
 
-.registerForm {
+.wrapper {
     display: flex;
     align-items: center;
-
-    width: 600px;
+    width: 700px;
     height: 500px;
     margin: auto;
     background-color: #f4f4f4;
     box-shadow: 1px 1px 1px #ccc;
     border-radius: 10px;
-    padding-left: 50px;
-}
-
-.form {
-    width: 300px;
-    margin: 0 auto;
+    padding: 50px;
 }
