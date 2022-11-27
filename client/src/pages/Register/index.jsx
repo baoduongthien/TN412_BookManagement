@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
 import styles from './Register.module.css';
-import { registerUser } from '../../redux/authRequest';
+import { registerUser } from '../../services/authService';
 
 function Register() {
 

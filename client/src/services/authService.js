@@ -1,9 +1,9 @@
 
 import axios from 'axios';
 
-import { loginFailed, loginStart, loginSuccess } from "./authSlice";
-import { registerFailed, registerStart, registerSuccess } from "./authSlice";
-import { logoutFailed, logoutStart, logoutSuccess } from "./authSlice";
+import { loginFailed, loginStart, loginSuccess } from "../redux/authSlice";
+import { registerFailed, registerStart, registerSuccess } from "../redux/authSlice";
+import { logoutFailed, logoutStart, logoutSuccess } from "../redux/authSlice";
 
 const URL_LOGIN = 'http://localhost:8080/api/auth/signin';
 const URL_REGISTER = 'http://localhost:8080/api/auth/signup';

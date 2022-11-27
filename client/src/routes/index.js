@@ -4,10 +4,13 @@ import { Navigate } from 'react-router-dom';
 
 import { HomeLayout, AdminLayout } from '../components/Layouts';
 
-import Home from '../pages/Home';
+import Home from '../pages/Guest/Home';
+
+import Admin from '../pages/Admin';
+import AdminAuthor from '../pages/Admin/Author';
+
 import Login from '../pages/Login';
 import Register from '../pages/Register';
-import Admin from '../pages/Admin';
 
 const publicRoutes = [
     { path: '/', component: Home, layout: HomeLayout },
@@ -17,6 +20,7 @@ const publicRoutes = [
 
 const privateRoutes = [
     { path: '/admin', component: Admin, layout: AdminLayout },
+    { path: '/admin/authors', component: AdminAuthor, layout: AdminLayout },
 ];
 
 function PrivateRoute({ children }) {

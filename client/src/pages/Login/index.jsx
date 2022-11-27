@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { loginUser } from '../../redux/authRequest';
+import { loginUser } from '../../services/authService';
 import styles from './Login.module.css';
 
 function Login() {
