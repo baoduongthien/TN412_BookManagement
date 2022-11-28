@@ -8,6 +8,10 @@
     }
 }
 
+.ml4 {
+    margin-left: 4px;
+}
+
 .modal {
     position: fixed;
     top: 0;
@@ -34,9 +38,10 @@
     z-index: 2;
     border-radius: 5px;
     overflow: hidden;
+    min-width: 320px;
     animation: growth linear 0.1s;
 }
 
 .form {
-    padding: 40px;
+    padding: 32px;
 }

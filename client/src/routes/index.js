@@ -8,6 +8,8 @@ import Home from '../pages/Guest/Home';
 
 import Admin from '../pages/Admin';
 import AdminAuthor from '../pages/Admin/Author';
+import AdminCategory from '../pages/Admin/Category';
+import AdminPublisher from '../pages/Admin/Publisher/Publisher';
 
 import Login from '../pages/Login';
 import Register from '../pages/Register';
@@ -21,6 +23,8 @@ const publicRoutes = [
 const privateRoutes = [
     { path: '/admin', component: Admin, layout: AdminLayout },
     { path: '/admin/authors', component: AdminAuthor, layout: AdminLayout },
+    { path: '/admin/categories', component: AdminCategory, layout: AdminLayout },
+    { path: '/admin/publishers', component: AdminPublisher, layout: AdminLayout },
 ];
 
 function PrivateRoute({ children }) {
