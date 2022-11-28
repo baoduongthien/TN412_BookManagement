@@ -1,11 +1,9 @@
 
 import { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { addCategory, deleteCategory, editCategory, getAllCategories } from '../../../services/adminCategoryService.js';
 import FormModal from '../../../components/FormModal';
-import { toast } from 'react-toastify';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
 function AdminCategory() {
@@ -153,7 +151,6 @@ function AdminCategory() {
                     handleDelete
                 }} modalState={modalState} />
             }
-            <ToastContainer />
         </div>
 
     );

@@ -1,11 +1,9 @@
 
 import { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { addPublisher, editPublisher, deletePublisher, getAllPublishers } from '../../../services/adminPublisherService.js'
 import FormModal from '../../../components/FormModal';
-import { toast } from 'react-toastify';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
 function AdminPublisher() {
@@ -153,7 +151,6 @@ function AdminPublisher() {
                     handleDelete
                 }} modalState={modalState} />
             }
-            <ToastContainer />
         </div>
 
     );

@@ -1,13 +1,11 @@
 
 import { useState, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 import { getAllAuthors } from '../../../services/adminAuthorService.js';
-import FormModal from '../../../components/FormModal';
 import { addAuthor, editAuthor, deleteAuthor } from '../../../services/adminAuthorService.js';
-import { toast } from 'react-toastify';
 import { toastConfig } from '../../../configs/toastConfig.js';
+import FormModal from '../../../components/FormModal';
 
 function AdminAuthor() {
 
@@ -154,9 +152,7 @@ function AdminAuthor() {
                     handleDelete: handleDeleteAuthor
                 }} modalState={modalState} />
             }
-            <ToastContainer />
         </div>
-
     );
 }
 

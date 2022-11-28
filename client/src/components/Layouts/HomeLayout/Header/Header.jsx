@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { logoutUser } from '../../../../services/authService';
+import { logoutUser } from '../../../../services/authService.js';
 
 function Header() {
 
@@ -22,16 +22,16 @@ function Header() {
                         <Link className="nav-link" to="/">Trang chủ</Link>
                     </li>
 
-                    { currentUser?.roles.some((role) => role === 'admin') ? (
+                    {currentUser?.roles.some((role) => role === 'admin') ? (
                         <li className="nav-item">
                             <Link className="nav-link" to="/admin">Dashboard</Link>
                         </li>
-                    ) : null }
-                    
+                    ) : null}
+
                 </ul>
 
                 <div className="navbar-nav">
-                    { currentUser ? (
+                    {currentUser ? (
                         <>
                             <span className="navbar-text">Chào {currentUser.username}</span>
                             <Link className="nav-link" onClick={handleLogout}>Đăng xuất</Link>
@@ -41,7 +41,7 @@ function Header() {
                             <Link className="nav-link" to="/login">Đăng nhập</Link>
                             <Link className="nav-link" to="/register">Đăng ký</Link>
                         </>
-                    ) }
+                    )}
                 </div>
 
             </div>
