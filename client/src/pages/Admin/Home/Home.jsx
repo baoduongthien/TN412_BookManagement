@@ -1,5 +1,4 @@
-
-function Admin() {
+function Home() {
     return (
         <div className="flex-grow-1">
             <h2>Admin page</h2>
@@ -7,4 +6,4 @@ function Admin() {
     );
 }
 
-export default Admin;
+export default Home;

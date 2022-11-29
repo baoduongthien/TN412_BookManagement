@@ -1,3 +1,5 @@
 
-export { default as HomeLayout } from './HomeLayout';
-export { default as AdminLayout } from './AdminLayout';
+import GuestLayout from './GuestLayout';
+import AdminLayout from './AdminLayout';
+
+export { GuestLayout, AdminLayout };

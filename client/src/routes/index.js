@@ -2,32 +2,24 @@
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { HomeLayout, AdminLayout } from '../components/Layouts';
-
-import Home from '../pages/Guest/Home';
-
+import { GuestLayout, AdminLayout } from '../components/Layouts';
+import Guest from '../pages/Guest';
 import Admin from '../pages/Admin';
-import AdminAuthor from '../pages/Admin/Author';
-import AdminCategory from '../pages/Admin/Category';
-import AdminPublisher from '../pages/Admin/Publisher/Publisher';
-
-import Login from '../pages/Guest/Login';
-import Register from '../pages/Guest/Register';
 
 const publicRoutes = [
-    { path: '/', component: Home, layout: HomeLayout },
+    { path: '/', component: Guest.Home, layout: GuestLayout },
 ];
 
 const authRoutes = [
-    { path: '/login', component: Login, layout: HomeLayout },
-    { path: '/register', component: Register, layout: HomeLayout },
+    { path: '/login', component: Guest.Login, layout: GuestLayout },
+    { path: '/register', component: Guest.Register, layout: GuestLayout },
 ];
 
 const privateRoutes = [
-    { path: '/admin', component: Admin, layout: AdminLayout },
-    { path: '/admin/authors', component: AdminAuthor, layout: AdminLayout },
-    { path: '/admin/categories', component: AdminCategory, layout: AdminLayout },
-    { path: '/admin/publishers', component: AdminPublisher, layout: AdminLayout },
+    { path: '/admin', component: Admin.Home, layout: AdminLayout },
+    { path: '/admin/authors', component: Admin.Author, layout: AdminLayout },
+    { path: '/admin/categories', component: Admin.Category, layout: AdminLayout },
+    { path: '/admin/publishers', component: Admin.Publisher, layout: AdminLayout },
 ];
 
 function AuthRoute({ children}) {

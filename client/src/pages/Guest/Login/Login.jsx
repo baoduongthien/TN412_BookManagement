@@ -46,8 +46,6 @@ function Login() {
                     
                     dispatch(loginFailed());
                 });
-
-
         }
     });
 

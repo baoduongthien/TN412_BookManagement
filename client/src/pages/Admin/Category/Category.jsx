@@ -2,16 +2,16 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-import { addCategory, deleteCategory, editCategory, getAllCategories } from '../../../services/adminCategoryService.js';
+import categoryService from '../../../services/categoryService.js';
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
-function AdminCategory() {
+function Category() {
 
-    const [ categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
 
-    const [ recallAPI, setToRecallAPI ] = useState(false);
-    const [ modalState, setModalState ] = useState({
+    const [recallAPI, setToRecallAPI] = useState(false);
+    const [modalState, setModalState] = useState({
         type: '',
         heading: '',
         content: 'Tên danh mục',
@@ -23,7 +23,7 @@ function AdminCategory() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await getAllCategories();
+                const data = await categoryService.getAllCategories();
                 setCategories(data);
             } catch (error) {
                 console.log(error);
@@ -72,45 +72,45 @@ function AdminCategory() {
     }
 
     function handleAdd(body) {
-        addCategory(body)
-        .then(() => {
-            toast.success('Thêm thành công!', toastConfig);
+        categoryService.addCategory(body)
+            .then(() => {
+                toast.success('Thêm thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Thêm thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Thêm thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     function handleEdit(id, body) {
-        editCategory(id, body)
-        .then(() => {
-            toast.success('Sửa thành công!', toastConfig);
+        categoryService.editCategory(id, body)
+            .then(() => {
+                toast.success('Sửa thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Sửa thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Sửa thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     function handleDelete(id) {
-        deleteCategory(id)
-        .then(() => {
-            toast.success('Xóa thành công!', toastConfig);
+        categoryService.deleteCategory(id)
+            .then(() => {
+                toast.success('Xóa thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Xóa thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Xóa thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     return (
@@ -130,10 +130,10 @@ function AdminCategory() {
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{category.name}</td>
-                            
+
                             <td>
                                 <button onClick={(e) => showEditModal(e)} data-id={category.id} data-name={category.name} className="btn btn-outline-primary">Sửa</button>
-                                <button onClick={(e) => showDeleteModal(e)} data-id={category.id} data-name={category.name} className="btn btn-danger" style={{marginLeft: '4px'}}>Xóa</button>
+                                <button onClick={(e) => showDeleteModal(e)} data-id={category.id} data-name={category.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
                             </td>
 
                         </tr>
@@ -145,7 +145,7 @@ function AdminCategory() {
             {
                 modalState.state &&
                 <FormModal callback={{
-                    setModalState, 
+                    setModalState,
                     handleAdd,
                     handleEdit,
                     handleDelete
@@ -156,4 +156,4 @@ function AdminCategory() {
     );
 }
 
-export default AdminCategory;
+export default Category;

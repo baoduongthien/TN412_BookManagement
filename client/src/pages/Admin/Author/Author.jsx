@@ -2,12 +2,11 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-import { getAllAuthors } from '../../../services/adminAuthorService.js';
-import { addAuthor, editAuthor, deleteAuthor } from '../../../services/adminAuthorService.js';
+import authorService from '../../../services/authorService.js';
 import { toastConfig } from '../../../configs/toastConfig.js';
 import FormModal from '../../../components/FormModal';
 
-function AdminAuthor() {
+function Author() {
 
     const [authors, setAuthors] = useState([]);
 
@@ -24,7 +23,7 @@ function AdminAuthor() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await getAllAuthors();
+                const data = await authorService.getAllAuthors();
                 setAuthors(data);
             } catch (error) {
                 console.log(error);
@@ -73,7 +72,7 @@ function AdminAuthor() {
     }
 
     function handleAddAuthor(body) {
-        addAuthor(body)
+        authorService.addAuthor(body)
         .then(() => {
             toast.success('Thêm thành công!', toastConfig);
 
@@ -87,7 +86,7 @@ function AdminAuthor() {
     }
 
     function handleEditAuthor(id, body) {
-        editAuthor(id, body)
+        authorService.editAuthor(id, body)
         .then(() => {
             toast.success('Sửa thành công!', toastConfig);
 
@@ -101,7 +100,7 @@ function AdminAuthor() {
     }
 
     function handleDeleteAuthor(id) {
-        deleteAuthor(id)
+        authorService.deleteAuthor(id)
         .then(() => {
             toast.success('Xóa thành công!', toastConfig);
 
@@ -156,4 +155,4 @@ function AdminAuthor() {
     );
 }
 
-export default AdminAuthor;
+export default Author;

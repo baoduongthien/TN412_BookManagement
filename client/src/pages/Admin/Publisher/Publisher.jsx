@@ -2,16 +2,16 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-import { addPublisher, editPublisher, deletePublisher, getAllPublishers } from '../../../services/adminPublisherService.js'
+import publisherService from '../../../services/publisherService.js'
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
-function AdminPublisher() {
+function Publisher() {
 
-    const [ publishers, setPublishers] = useState([]);
+    const [publishers, setPublishers] = useState([]);
 
-    const [ recallAPI, setToRecallAPI ] = useState(false);
-    const [ modalState, setModalState ] = useState({
+    const [recallAPI, setToRecallAPI] = useState(false);
+    const [modalState, setModalState] = useState({
         type: '',
         heading: '',
         content: 'Tên nhà xuất bản',
@@ -23,7 +23,7 @@ function AdminPublisher() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await getAllPublishers();
+                const data = await publisherService.getAllPublishers();
                 setPublishers(data);
             } catch (error) {
                 console.log(error);
@@ -72,45 +72,45 @@ function AdminPublisher() {
     }
 
     function handleAdd(body) {
-        addPublisher(body)
-        .then(() => {
-            toast.success('Thêm thành công!', toastConfig);
+        publisherService.addPublisher(body)
+            .then(() => {
+                toast.success('Thêm thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Thêm thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Thêm thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     function handleEdit(id, body) {
-        editPublisher(id, body)
-        .then(() => {
-            toast.success('Sửa thành công!', toastConfig);
+        publisherService.editPublisher(id, body)
+            .then(() => {
+                toast.success('Sửa thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Sửa thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Sửa thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     function handleDelete(id) {
-        deletePublisher(id)
-        .then(() => {
-            toast.success('Xóa thành công!', toastConfig);
+        publisherService.deletePublisher(id)
+            .then(() => {
+                toast.success('Xóa thành công!', toastConfig);
 
-            setToRecallAPI(!recallAPI);
-            setModalState({ ...modalState, state: false });
-        })
-        .catch(error => {
-            toast.error('Xóa thất bại!', toastConfig);
-            console.log(error);
-        });
+                setToRecallAPI(!recallAPI);
+                setModalState({ ...modalState, state: false });
+            })
+            .catch(error => {
+                toast.error('Xóa thất bại!', toastConfig);
+                console.log(error);
+            });
     }
 
     return (
@@ -130,10 +130,10 @@ function AdminPublisher() {
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{publisher.name}</td>
-                            
+
                             <td>
                                 <button onClick={(e) => showEditModal(e)} data-id={publisher.id} data-name={publisher.name} className="btn btn-outline-primary">Sửa</button>
-                                <button onClick={(e) => showDeleteModal(e)} data-id={publisher.id} data-name={publisher.name} className="btn btn-danger" style={{marginLeft: '4px'}}>Xóa</button>
+                                <button onClick={(e) => showDeleteModal(e)} data-id={publisher.id} data-name={publisher.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
                             </td>
 
                         </tr>
@@ -145,7 +145,7 @@ function AdminPublisher() {
             {
                 modalState.state &&
                 <FormModal callback={{
-                    setModalState, 
+                    setModalState,
                     handleAdd,
                     handleEdit,
                     handleDelete
@@ -156,4 +156,4 @@ function AdminPublisher() {
     );
 }
 
-export default AdminPublisher;
+export default Publisher;
