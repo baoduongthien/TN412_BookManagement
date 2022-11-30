@@ -1,10 +1,10 @@
 package com.nhom8.controllers;
 
 import java.util.Optional;
-import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nhom8.models.Author;
@@ -27,9 +28,9 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping("/api/authors")
-    public ResponseEntity<List<Author>> getAllAuthors() {
+    public ResponseEntity<Page<Author>> getAllAuthors(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(authorService.findAll());
+            return ResponseEntity.ok(authorService.getAllAuthors(page, sortBy));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -37,10 +38,9 @@ public class AuthorController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/api/author")
-    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author req) {
+    public ResponseEntity<Author> createAuthor(@Valid @RequestBody Author author) {
         try {
-            authorService.save(req);
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(authorService.createAuthor(author));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -50,10 +50,7 @@ public class AuthorController {
     @GetMapping("/api/author/{id}")
     public ResponseEntity<Author> getAuthor(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
-
-            return ResponseEntity.ok(author);
+            return ResponseEntity.ok(authorService.getAuthor(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -61,13 +58,9 @@ public class AuthorController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/api/author/{id}")
-    public ResponseEntity<Author> editAuthor(@PathVariable Long id, @Valid @RequestBody Author req) {
+    public ResponseEntity<Author> editAuthor(@PathVariable Long id, @Valid @RequestBody Author editedAuthor) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
-            author.setName(req.getName());
-            
-            return ResponseEntity.ok(authorService.save(author));
+            return ResponseEntity.ok(authorService.editAuthor(id, editedAuthor));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -77,14 +70,9 @@ public class AuthorController {
     @DeleteMapping("/api/author/{id}")
     public ResponseEntity<Author> deleteAuthor(@PathVariable Long id) {
         try {
-            Optional<Author> optionalAuthor = authorService.findById(id);
-            Author author = optionalAuthor.get();
-            
-            authorService.delete(author);
-            
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(authorService.deleteAuthor(id));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
     

@@ -1,16 +1,10 @@
 package com.nhom8.controllers;
 
 import java.util.Optional;
-import java.io.File;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Timestamp;
-import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,34 +16,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.nhom8.models.Author;
 import com.nhom8.models.Book;
-import com.nhom8.models.Category;
-import com.nhom8.models.Publisher;
-import com.nhom8.services.AuthorService;
 import com.nhom8.services.BookService;
-import com.nhom8.services.CategoryService;
-import com.nhom8.services.PublisherService;
 
 @RestController
 public class BookController {
 
-    private static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
-
     @Autowired
     private BookService bookService;
-    @Autowired
-    private AuthorService authorService;
-    @Autowired
-    private CategoryService categoryService;
-    @Autowired
-    private PublisherService publisherService;
 
     @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/api/books")
-    public ResponseEntity<List<Book>> getAllBooks() {
+    public ResponseEntity<Page<Book>> getAllBooks(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(bookService.findAll());
+            return ResponseEntity.ok(bookService.getAllBooks(page, sortBy));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -57,42 +37,16 @@ public class BookController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PostMapping("/api/book")
-    public ResponseEntity<Book> createBook(@RequestParam @Valid String name, @RequestParam String author_id,
-            @RequestParam String category_id, @RequestParam String publisher_id, @RequestParam MultipartFile image) {
-        try {
-            Path staticPath = Paths.get("static");
-            Path imagePath = Paths.get("images");
-            if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
-                Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
-            }
-
-            String thumbnail = (new Timestamp(System.currentTimeMillis())).getTime() + image.getOriginalFilename();
-
-            Path file = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(thumbnail);
-            try (OutputStream os = Files.newOutputStream(file)) {
-                os.write(image.getBytes());
-            }
-
-            // create new book
-
-            Book book = new Book();
-
-            book.setName(name);
-
-            Optional<Author> author = authorService.findById(Long.parseLong(author_id));
-            book.setAuthor(author.get());
-
-            Optional<Category> category = categoryService.findById(Long.parseLong(category_id));
-            book.setCategory(category.get());
-
-            Optional<Publisher> publisher = publisherService.findById(Long.parseLong(publisher_id));
-            book.setPublisher(publisher.get());
-
-            book.setThumbnail(thumbnail);
-            
-            bookService.save(book);
-
-            return ResponseEntity.ok().build();
+    public ResponseEntity<Book> createBook(
+        @RequestParam @Valid String name,
+        @RequestParam @Valid String description,
+        @RequestParam(required=false) String author_id,
+        @RequestParam(required=false) String category_id, 
+        @RequestParam(required=false) String publisher_id, 
+        @RequestParam(required=false) MultipartFile image
+    ) {
+        try {            
+            return ResponseEntity.ok(bookService.createBook(name, description, author_id, category_id, publisher_id, image));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -102,10 +56,7 @@ public class BookController {
     @GetMapping("/api/book/{id}")
     public ResponseEntity<Book> getBook(@PathVariable Long id) {
         try {
-            Optional<Book> optionalBook = bookService.findById(id);
-            Book book = optionalBook.get();
-
-            return ResponseEntity.ok(book);
+            return ResponseEntity.ok(bookService.getBook(id));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -113,49 +64,17 @@ public class BookController {
 
     @PreAuthorize("hasAuthority('admin')")
     @PutMapping("/api/book/{id}")
-    public ResponseEntity<Book> editBook(@PathVariable Long id, @RequestParam String name, @RequestParam String author_id,
-            @RequestParam String category_id, @RequestParam String publisher_id, @RequestParam(value="image", required=false) MultipartFile image) {
+    public ResponseEntity<Book> editBook(
+        @PathVariable Long id, 
+        @RequestParam @Valid String name, 
+        @RequestParam @Valid String description,
+        @RequestParam(required=false) String author_id,
+        @RequestParam(required=false) String category_id, 
+        @RequestParam(required=false) String publisher_id, 
+        @RequestParam(required=false) MultipartFile image
+    ) {
         try {
-
-            Book book = bookService.findById(id).get();
-            String thumbnail = book.getThumbnail();
-
-            if (image != null && !image.isEmpty()) {
-
-                Path staticPath = Paths.get("static");
-                Path imagePath = Paths.get("images");
-
-                File oldThumbnail = new File(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(book.getThumbnail()).toString());
-                oldThumbnail.delete();
-
-                if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
-                    Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
-                }
-    
-                thumbnail = (new Timestamp(System.currentTimeMillis())).getTime() + image.getOriginalFilename();
-    
-                Path file = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(thumbnail);
-                try (OutputStream os = Files.newOutputStream(file)) {
-                    os.write(image.getBytes());
-                }
-            }
-            
-            book.setName(name);
-
-            Optional<Author> author = authorService.findById(Long.parseLong(author_id));
-            book.setAuthor(author.get());
-
-            Optional<Category> category = categoryService.findById(Long.parseLong(category_id));
-            book.setCategory(category.get());
-
-            Optional<Publisher> publisher = publisherService.findById(Long.parseLong(publisher_id));
-            book.setPublisher(publisher.get());
-
-            book.setThumbnail(thumbnail);
-            
-            bookService.save(book);
-
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(bookService.editBook(id, name, description, author_id, category_id, publisher_id, image));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -165,20 +84,9 @@ public class BookController {
     @DeleteMapping("/api/book/{id}")
     public ResponseEntity<Book> deleteBook(@PathVariable Long id) {
         try {
-
-            Book book = bookService.findById(id).get();
-
-            Path staticPath = Paths.get("static");
-            Path imagePath = Paths.get("images");
-
-            File oldThumbnail = new File(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(book.getThumbnail()).toString());
-            oldThumbnail.delete();
-
-            bookService.delete(book);
-
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(bookService.deleteBook(id));
         } catch (Exception e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 

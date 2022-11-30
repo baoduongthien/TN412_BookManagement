@@ -13,6 +13,9 @@ public class Book {
     private String name;
 
     @Column
+    private String description;
+
+    @Column
     private String thumbnail;
 
     @ManyToOne
@@ -30,9 +33,10 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long id, String name, String thumbnail, Author author, Category category, Publisher publisher) {
+    public Book(Long id, String name, String description, String thumbnail, Author author, Category category, Publisher publisher) {
         this.id = id;
         this.name = name;
+        this.description = description;
         this.thumbnail = thumbnail;
         this.author = author;
         this.category = category;
@@ -53,6 +57,14 @@ public class Book {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getThumbnail() {
