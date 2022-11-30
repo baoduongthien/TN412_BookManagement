@@ -24,7 +24,7 @@ function Publisher() {
         (async function getData() {
             try {
                 const data = await publisherService.getAllPublishers();
-                setPublishers(data);
+                setPublishers(data.content);
             } catch (error) {
                 console.log(error);
             }
@@ -126,7 +126,7 @@ function Publisher() {
                     </tr>
                 </thead>
                 <tbody>
-                    {publishers?.map((publisher, index) => (
+                    {publishers.length > 0 ? publishers.map((publisher, index) => (
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{publisher.name}</td>
@@ -137,8 +137,11 @@ function Publisher() {
                             </td>
 
                         </tr>
-
-                    ))}
+                    )) : (
+                        <tr>
+                            <td colSpan={3} className="text-center">Không có nhà xuất bản</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 

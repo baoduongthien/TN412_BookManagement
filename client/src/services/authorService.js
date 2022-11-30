@@ -1,8 +1,8 @@
 
 import axiosJWT from "../helpers/axiosJWT.js";
 
-const getAllAuthors = async() => {
-    const { data } = await axiosJWT.get('/authors');
+const getAllAuthors = async(currentPage = 0) => {
+    const { data } = await axiosJWT.get(`/authors?page=${currentPage}`);
     return data;
 }
 

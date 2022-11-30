@@ -24,7 +24,7 @@ function Category() {
         (async function getData() {
             try {
                 const data = await categoryService.getAllCategories();
-                setCategories(data);
+                setCategories(data.content);
             } catch (error) {
                 console.log(error);
             }
@@ -126,7 +126,7 @@ function Category() {
                     </tr>
                 </thead>
                 <tbody>
-                    {categories?.map((category, index) => (
+                    {categories.length > 0 ? categories.map((category, index) => (
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <td>{category.name}</td>
@@ -138,7 +138,11 @@ function Category() {
 
                         </tr>
 
-                    ))}
+                    )) : (
+                        <tr>
+                            <td colSpan={3} className="text-center">Không có danh mục</td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 
