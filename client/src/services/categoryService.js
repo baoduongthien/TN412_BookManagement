@@ -1,8 +1,13 @@
 
 import axiosJWT from "../helpers/axiosJWT.js";
 
+const getCategories = async(currentPage = 0) => {
+    const { data } = await axiosJWT.get(`/categories?page=${currentPage}`);
+    return data;
+}
+
 const getAllCategories = async() => {
-    const { data } = await axiosJWT.get('/categories');
+    const { data } = await axiosJWT.get('/allCategories');
     return data;
 }
 
@@ -19,6 +24,7 @@ const deleteCategory = async(id) => {
 }
 
 const categoryService = {
+    getCategories,
     getAllCategories,
     addCategory,
     editCategory,

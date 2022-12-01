@@ -5,7 +5,7 @@ function Sidebar() {
 
     return (
         <nav id="sidebarMenu" className="d-md-block bg-light sidebar collapse" style={{height: '100%'}}>
-            <div className="position-sticky pt-3 sidebar-sticky">
+            <div className="position-sticky pt-3 pb-3 sidebar-sticky">
                 <ul className="nav flex-column">
                     <li className="nav-item">
                         <Link className="nav-link active" to="/admin">

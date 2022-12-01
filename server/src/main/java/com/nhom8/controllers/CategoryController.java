@@ -1,5 +1,6 @@
 package com.nhom8.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -28,9 +29,18 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/api/categories")
-    public ResponseEntity<Page<Category>> getAllCategories(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+    public ResponseEntity<Page<Category>> getCategories(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(categoryService.getAllCategories(page, sortBy));
+            return ResponseEntity.ok(categoryService.getCategories(page, sortBy));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/allCategories")
+    public ResponseEntity<List<Category>> getAllCategories() {
+        try {
+            return ResponseEntity.ok(categoryService.getAllCategories());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

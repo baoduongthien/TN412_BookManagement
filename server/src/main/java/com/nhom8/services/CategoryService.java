@@ -1,5 +1,6 @@
 package com.nhom8.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,14 @@ public class CategoryService {
     @Autowired
     CategoryRepository categoryRepository;
 
-    public Page<Category> getAllCategories(Optional<Integer> page, Optional<String> sortBy) {
+    public Page<Category> getCategories(Optional<Integer> page, Optional<String> sortBy) {
         Page<Category> pageCategory = categoryRepository.findAll(PageRequest.of(page.orElse(0), 5, Sort.Direction.DESC, sortBy.orElse("id")));
         return pageCategory;
+    }
+
+    public List<Category> getAllCategories() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories;
     }
 
     public Category createCategory(Category category) {

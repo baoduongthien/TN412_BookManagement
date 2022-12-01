@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,9 +39,14 @@ public class BookService {
     @Autowired
     private PublisherRepository publisherRepository;
 
-    public Page<Book> getAllBooks(Optional<Integer> page, Optional<String> sortBy) {
+    public Page<Book> getBooks(Optional<Integer> page, Optional<String> sortBy) {
         Page<Book> pageBook = bookRepository.findAll(PageRequest.of(page.orElse(0), 5, Sort.Direction.DESC, sortBy.orElse("id")));
         return pageBook;
+    }
+
+    public List<Book> getAllBooks() {
+        List<Book> books = bookRepository.findAll();
+        return books;
     }
 
     private void deleteOldImage(String thumbnail) {

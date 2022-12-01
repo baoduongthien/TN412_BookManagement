@@ -6,9 +6,14 @@ import categoryService from '../../../services/categoryService.js';
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
+import Pagination from '../../../components/Pagination/Pagination.jsx';
+
 function Category() {
 
     const [categories, setCategories] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(-1);
 
     const [recallAPI, setToRecallAPI] = useState(false);
     const [modalState, setModalState] = useState({
@@ -23,7 +28,9 @@ function Category() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await categoryService.getAllCategories();
+                const data = await categoryService.getCategories();
+
+                setTotalPages(() => data.totalPages);
                 setCategories(data.content);
             } catch (error) {
                 console.log(error);
@@ -146,6 +153,8 @@ function Category() {
                 </tbody>
             </table>
 
+            {totalPages > 1 && categories.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onFetchNewData={setCurrentPage} />}
+
             {
                 modalState.state &&
                 <FormModal callback={{
@@ -156,7 +165,6 @@ function Category() {
                 }} modalState={modalState} />
             }
         </div>
-
     );
 }
 

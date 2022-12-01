@@ -1,5 +1,6 @@
 package com.nhom8.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,14 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
-    public Page<Author> getAllAuthors(Optional<Integer> page, Optional<String> sortBy) {
+    public Page<Author> getAuthors(Optional<Integer> page, Optional<String> sortBy) {
         Page<Author> pageAuthor = authorRepository.findAll(PageRequest.of(page.orElse(0), 5, Sort.Direction.DESC, sortBy.orElse("id")));
         return pageAuthor;
+    }
+
+    public List<Author> getAllAuthors() {
+        List<Author> authors = authorRepository.findAll();
+        return authors;
     }
 
     public Author createAuthor(Author author) {

@@ -13,6 +13,7 @@ function Author() {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(-1);
+    const [isLoading, setIsLoading] = useState(true);
 
     const [recallAPI, setToRecallAPI] = useState(false);
     const [modalState, setModalState] = useState({
@@ -27,8 +28,11 @@ function Author() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await authorService.getAllAuthors(currentPage);
+                setIsLoading(true);
 
+                const data = await authorService.getAuthors(currentPage);
+
+                setIsLoading(false);
                 setTotalPages(() => data.totalPages);
                 setAuthors(data.content);
             } catch (error) {
@@ -132,25 +136,34 @@ function Author() {
                     </tr>
                 </thead>
                 <tbody>
-                    {authors.length > 0 ? authors.map((author, index) => (
-                        <tr key={index}>
-                            <th scope="row">{index + currentPage * 5 + 1}</th>
-                            <td>{author.name}</td>
-
-                            <td>
-                                <button onClick={(e) => showEditModal(e)} data-id={author.id} data-name={author.name} className="btn btn-outline-primary">Sửa</button>
-                                <button onClick={(e) => showDeleteModal(e)} data-id={author.id} data-name={author.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
-                            </td>
-                        </tr>
-                    )) : (
+                    {isLoading ? (
                         <tr>
-                            <td colSpan={3} className="text-center">Không có tác giả</td>
+                            <td colSpan={3} className="text-center">Đang tải dữ liệu...</td>
                         </tr>
+                    ) : (
+                        <>
+                            {authors.length > 0 ? authors.map((author, index) => (
+                                <tr key={index}>
+                                    <th scope="row">{index + currentPage * 5 + 1}</th>
+                                    <td>{author.name}</td>
+
+                                    <td>
+                                        <button onClick={(e) => showEditModal(e)} data-id={author.id} data-name={author.name} className="btn btn-outline-primary">Sửa</button>
+                                        <button onClick={(e) => showDeleteModal(e)} data-id={author.id} data-name={author.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
+                                    </td>
+                                </tr>
+                            )) : (
+                                <tr>
+                                    <td colSpan={3} className="text-center">Không có tác giả</td>
+                                </tr>
+                            )}
+                        </>
                     )}
+
                 </tbody>
             </table>
 
-            {totalPages !== -1 && <Pagination currentPage={currentPage} totalPages={totalPages} onFetchNewData={setCurrentPage} />}
+            {totalPages > 1 && authors.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onFetchNewData={setCurrentPage} />}
             {
                 modalState.state &&
                 <FormModal callback={{

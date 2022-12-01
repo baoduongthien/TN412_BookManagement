@@ -1,5 +1,6 @@
 package com.nhom8.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -28,9 +29,18 @@ public class AuthorController {
     private AuthorService authorService;
 
     @GetMapping("/api/authors")
-    public ResponseEntity<Page<Author>> getAllAuthors(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+    public ResponseEntity<Page<Author>> getAuthors(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(authorService.getAllAuthors(page, sortBy));
+            return ResponseEntity.ok(authorService.getAuthors(page, sortBy));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/allAuthors")
+    public ResponseEntity<List<Author>> getAllAuthors() {
+        try {
+            return ResponseEntity.ok(authorService.getAllAuthors());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

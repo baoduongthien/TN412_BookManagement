@@ -1,8 +1,13 @@
 
 import axiosJWT from "../helpers/axiosJWT.js";
 
+const getPublishers = async(currentPage = 0) => {
+    const { data } = await axiosJWT.get(`/publishers?page=${currentPage}`);
+    return data;
+}
+
 const getAllPublishers = async() => {
-    const { data } = await axiosJWT.get('/publishers');
+    const { data } = await axiosJWT.get('/allPublishers');
     return data;
 }
 
@@ -19,6 +24,7 @@ const deletePublisher = async(id) => {
 }
 
 const publisherService = {
+    getPublishers,
     getAllPublishers,
     addPublisher,
     editPublisher,

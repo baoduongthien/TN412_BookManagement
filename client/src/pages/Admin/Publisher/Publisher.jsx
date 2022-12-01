@@ -6,9 +6,14 @@ import publisherService from '../../../services/publisherService.js'
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
 
+import Pagination from '../../../components/Pagination/Pagination.jsx';
+
 function Publisher() {
 
     const [publishers, setPublishers] = useState([]);
+
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(-1);
 
     const [recallAPI, setToRecallAPI] = useState(false);
     const [modalState, setModalState] = useState({
@@ -23,7 +28,9 @@ function Publisher() {
     useEffect(() => {
         (async function getData() {
             try {
-                const data = await publisherService.getAllPublishers();
+                const data = await publisherService.getPublishers();
+
+                setTotalPages(() => data.totalPages);
                 setPublishers(data.content);
             } catch (error) {
                 console.log(error);
@@ -144,6 +151,8 @@ function Publisher() {
                     )}
                 </tbody>
             </table>
+
+            {totalPages > 1 && publishers.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onFetchNewData={setCurrentPage} />}
 
             {
                 modalState.state &&

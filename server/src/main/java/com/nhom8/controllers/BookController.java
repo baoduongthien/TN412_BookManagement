@@ -1,5 +1,6 @@
 package com.nhom8.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,17 +21,26 @@ import org.springframework.web.multipart.MultipartFile;
 import com.nhom8.models.Book;
 import com.nhom8.services.BookService;
 
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 public class BookController {
 
     @Autowired
     private BookService bookService;
 
-    @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/api/books")
-    public ResponseEntity<Page<Book>> getAllBooks(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+    public ResponseEntity<Page<Book>> getBooks(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(bookService.getAllBooks(page, sortBy));
+            return ResponseEntity.ok(bookService.getBooks(page, sortBy));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/allBooks")
+    public ResponseEntity<List<Book>> getAllBooks() {
+        try {
+            return ResponseEntity.ok(bookService.getAllBooks());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

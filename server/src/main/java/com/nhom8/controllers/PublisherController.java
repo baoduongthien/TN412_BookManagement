@@ -1,5 +1,6 @@
 package com.nhom8.controllers;
 
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -28,9 +29,18 @@ public class PublisherController {
     private PublisherService publisherService;
 
     @GetMapping("/api/publishers")
-    public ResponseEntity<Page<Publisher>> getAllPublishers(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+    public ResponseEntity<Page<Publisher>> getPublishers(@RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
         try {
-            return ResponseEntity.ok(publisherService.getAllPublishers(page, sortBy));
+            return ResponseEntity.ok(publisherService.getPublishers(page, sortBy));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/api/allPublishers")
+    public ResponseEntity<List<Publisher>> getAllPublishers() {
+        try {
+            return ResponseEntity.ok(publisherService.getAllPublishers());
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

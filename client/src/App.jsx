@@ -1,21 +1,11 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { publicRoutes, privateRoutes, authRoutes, PrivateRoute, AuthRoute } from './routes';
-import axiosJWT from './helpers/axiosJWT.js';
 
 function App() {
-
-    const token = useSelector((state) => state.auth.login.currentUser?.accessToken);
-    useEffect(() => {
-        if (token) {
-            axiosJWT.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        }
-    }, [token]);
 
     return (
         <>

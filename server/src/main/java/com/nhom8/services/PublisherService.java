@@ -1,5 +1,6 @@
 package com.nhom8.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +17,14 @@ public class PublisherService {
     @Autowired
     PublisherRepository publisherRepository;
 
-    public Page<Publisher> getAllPublishers(Optional<Integer> page, Optional<String> sortBy) {
+    public Page<Publisher> getPublishers(Optional<Integer> page, Optional<String> sortBy) {
         Page<Publisher> pagePublisher = publisherRepository.findAll(PageRequest.of(page.orElse(0), 5, Sort.Direction.DESC, sortBy.orElse("id")));
         return pagePublisher;
+    }
+
+    public List<Publisher> getAllPublishers() {
+        List<Publisher> publishers = publisherRepository.findAll();
+        return publishers;
     }
 
     public Publisher createPublisher(Publisher publisher) {

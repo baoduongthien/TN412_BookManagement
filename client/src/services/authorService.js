@@ -1,8 +1,13 @@
 
 import axiosJWT from "../helpers/axiosJWT.js";
 
-const getAllAuthors = async(currentPage = 0) => {
+const getAuthors = async(currentPage = 0) => {
     const { data } = await axiosJWT.get(`/authors?page=${currentPage}`);
+    return data;
+}
+
+const getAllAuthors = async() => {
+    const { data } = await axiosJWT.get(`/allAuthors`);
     return data;
 }
 
@@ -19,6 +24,7 @@ const deleteAuthor = async(id) => {
 }
 
 const authorService = {
+    getAuthors,
     getAllAuthors,
     addAuthor,
     editAuthor,
