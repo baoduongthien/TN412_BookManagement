@@ -22,7 +22,7 @@ const privateRoutes = [
     { path: '/admin/publishers', component: Admin.Publisher, layout: AdminLayout },
     { path: '/admin/books/', component: Admin.Book, layout: AdminLayout },
     { path: '/admin/book/add', component: Admin.Book.AddBook, layout: AdminLayout },
-    { path: '/admin/book/edit/:id', component: Admin.Book.EditBook, layout: AdminLayout },
+    { path: '/admin/book/detail/:id', component: Admin.Book.DetailBook, layout: AdminLayout },
 ];
 
 function AuthRoute({ children}) {

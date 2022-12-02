@@ -1,9 +1,9 @@
 
 import Book from './Book.jsx';
 import AddBook from './AddBook.jsx';
-import EditBook from './EditBook.jsx';
+import DetailBook from './DetailBook.jsx';
 
 Book.AddBook = AddBook;
-Book.EditBook = EditBook;
+Book.DetailBook = DetailBook;
 
 export default Book;

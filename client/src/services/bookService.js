@@ -11,6 +11,11 @@ const getAllBooks = async() => {
     return data;
 }
 
+const getBook = async(id) => {
+    const { data } = await axiosJWT.get(`/book/${id}`);
+    return data;
+}
+
 const addBook = async(body) => {
     return await axiosJWT.post('/book', body, {
         headers: {
@@ -20,7 +25,11 @@ const addBook = async(body) => {
 }
 
 const editBook = async(id, body) => {
-    return await axiosJWT.put(`/book/${id}`, body);
+    return await axiosJWT.put(`/book/${id}`, body, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+    });
 }
 
 const deleteBook = async(id) => {
@@ -30,6 +39,7 @@ const deleteBook = async(id) => {
 const bookService = {
     getBooks,
     getAllBooks,
+    getBook,
     addBook,
     editBook,
     deleteBook

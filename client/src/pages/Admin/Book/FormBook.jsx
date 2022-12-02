@@ -11,7 +11,7 @@ import authorService from '../../../services/authorService';
 import categoryService from '../../../services/categoryService';
 import publisherService from '../../../services/publisherService';
 
-function FormBook() {
+function FormBook({ type, book }) {
 
     const [ authors, setAuthors ] = useState([]);
     const [ categories, setCategories ] = useState([]);
@@ -25,8 +25,6 @@ function FormBook() {
             const categoriesArray = await categoryService.getAllCategories();
             const publishersArray = await publisherService.getAllPublishers();
     
-            console.log(authorsArray, categoriesArray, publishersArray);
-    
             setAuthors(authorsArray);
             setCategories(categoriesArray);
             setPublishers(publishersArray);
@@ -35,30 +33,47 @@ function FormBook() {
 
     const formik = useFormik({
         initialValues: {
-            name: '',
-            description: '',
-            author_id: null,
-            category_id: null,
-            publisher_id: null,
+            name: type === 'detail' ? book.name : '',
+            description: type === 'detail' ? book?.description : '',
+            author_id: type === 'detail' ? (book?.author?.id ? `${book?.author?.id}` : null) : null,
+            category_id: type === 'detail' ? (book?.category?.id ? `${book?.category?.id}` : null) : null,
+            publisher_id: type === 'detail' ? (book?.publisher?.id ? `${book?.publisher?.id}` : null) : null,
             image: null,
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Tên không được bỏ trống!').max(40, 'Tên không được quá 40 ký tự'),
         }),
         onSubmit: function (values) {
-            console.log(values);
-            handleAddBook(values);            
+
+            if (type === 'detail') {
+                handleEditBook(book.id, values);
+            } else {
+                handleAddBook(values);            
+            }
         }
     });
 
+    function handleEditBook(id, body) {
+        bookService.editBook(id, body)
+        .then(() => {
+            toast.success('Sửa thành công!', toastConfig);
+            navigate('/admin/books');
+        })
+        .catch(error => {
+            toast.error('Sửa thất bại!', toastConfig);
+            console.log(error);
+        });
+    }
+
     function handleAddBook(body) {
         bookService.addBook(body)
-        .then(res => {
+        .then(() => {
             toast.success('Thêm thành công!', toastConfig);
             navigate('/admin/books');
         })
         .catch(error => {
             toast.error('Thêm thất bại!', toastConfig);
+            console.log(error);
         });
     }
 
@@ -97,7 +112,7 @@ function FormBook() {
                 <label htmlFor="author">Tác giả</label>
                 <select className="form-control" id="author" name="author_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn tác giả ----</option>
-                    {authors.map(author => <option value={author.id}>{author.name}</option>)}
+                    {authors?.map(author => <option value={author?.id} selected={book?.author?.id === author.id}>{author?.name}</option>)}
                 </select>
             </div>
 
@@ -105,7 +120,7 @@ function FormBook() {
                 <label htmlFor="category">Danh mục</label>
                 <select className="form-control" id="category" name="category_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn danh mục ----</option>
-                    {categories.map(category => <option value={category.id}>{category.name}</option>)}
+                    {categories?.map(category => <option value={category?.id} selected={book?.category?.id === category.id}>{category?.name}</option>)}
                 </select>
             </div>
 
@@ -113,7 +128,7 @@ function FormBook() {
                 <label htmlFor="publisher">Nhà xuất bản</label>
                 <select className="form-control" id="publisher" name="publisher_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn nhà xuất bản ----</option>
-                    {publishers.map(publisher => <option value={publisher.id}>{publisher.name}</option>)}
+                    {publishers?.map(publisher => <option value={publisher?.id} selected={book?.publisher?.id === publisher.id}>{publisher?.name}</option>)}
                 </select>
             </div>
 
@@ -122,10 +137,10 @@ function FormBook() {
                 <input type="file" accept="image/*" className="form-control-file" id="image" name="image" style={{display: 'none'}} onChange={handleChangeImage} />
             </div>
 
-            {formik.values.image && <img src={formik.values.image.preview} alt="book"/>}
+            {formik.values.image ? <img src={formik.values.image.preview} alt="book"/> : type === 'detail' ? <img src={`http://localhost:8080/images/${book?.thumbnail}`} alt="book" /> : null}
 
             <div className="form-group mt-2">
-                <input type="submit" className="btn btn-primary" value="Thêm sách" />
+                <input type="submit" className="btn btn-primary" value={`${type === 'detail' ? 'Sửa' : 'Thêm'} sách`} />
                 <Link to="/admin/books" className="btn btn-outline-primary" style={{ marginLeft: '4px' }}>Hủy</Link>
             </div>
 

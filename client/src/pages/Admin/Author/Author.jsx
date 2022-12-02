@@ -36,6 +36,7 @@ function Author() {
                 setTotalPages(() => data.totalPages);
                 setAuthors(data.content);
             } catch (error) {
+                setIsLoading(false);
                 console.log(error);
             }
         })();

@@ -1,11 +1,11 @@
 
-import FromBook from './FormBook.jsx';
+import FormBook from './FormBook.jsx';
 
 function AddBook() {
     return (
         <>
             <h1>Thêm sách</h1>
-            <FromBook />
+            <FormBook type="add" />
         </>
     );
 }

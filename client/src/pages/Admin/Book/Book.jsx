@@ -23,6 +23,7 @@ function Author() {
         state: false,
         entity: null,
     });
+
     // get data
     useEffect(() => {
         (async function getData() {
@@ -85,7 +86,7 @@ function Author() {
                             <td>{book.name}</td>
 
                             <td>
-                                <Link to={`/admin/book/edit/${book.id}`} className="btn btn-outline-primary" style={{ marginLeft: '4px' }}>Chi tiết</Link>
+                                <Link to={`/admin/book/detail/${book.id}`} className="btn btn-outline-primary" style={{ marginLeft: '4px' }}>Chi tiết</Link>
                                 <button data-id={book.id} data-name={book.name} onClick={(e) => showDeleteModal(e)} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
                             </td>
                         </tr>
