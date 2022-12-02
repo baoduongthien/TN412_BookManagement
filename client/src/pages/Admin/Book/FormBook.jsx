@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useLayoutEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import bookService from '../../../services/bookService';
 import { toast } from 'react-toastify';
@@ -13,21 +13,21 @@ import publisherService from '../../../services/publisherService';
 
 function FormBook({ type, book }) {
 
-    const [ authors, setAuthors ] = useState([]);
-    const [ categories, setCategories ] = useState([]);
-    const [ publishers, setPublishers ] = useState([]);
+    const [ data, setData ] = useState({});
 
     const navigate = useNavigate();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         (async() => {
             const authorsArray = await authorService.getAllAuthors();
             const categoriesArray = await categoryService.getAllCategories();
             const publishersArray = await publisherService.getAllPublishers();
     
-            setAuthors(authorsArray);
-            setCategories(categoriesArray);
-            setPublishers(publishersArray);
+            setData({
+                authors: authorsArray,
+                categories: categoriesArray,
+                publishers: publishersArray
+            });
         })();
     }, []);
 
@@ -112,7 +112,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="author">Tác giả</label>
                 <select className="form-control" id="author" name="author_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn tác giả ----</option>
-                    {authors?.map(author => <option value={author?.id} selected={book?.author?.id === author.id}>{author?.name}</option>)}
+                    {data.authors?.map(author => <option value={author?.id} selected={book?.author?.id === author.id}>{author?.name}</option>)}
                 </select>
             </div>
 
@@ -120,7 +120,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="category">Danh mục</label>
                 <select className="form-control" id="category" name="category_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn danh mục ----</option>
-                    {categories?.map(category => <option value={category?.id} selected={book?.category?.id === category.id}>{category?.name}</option>)}
+                    {data.categories?.map(category => <option value={category?.id} selected={book?.category?.id === category.id}>{category?.name}</option>)}
                 </select>
             </div>
 
@@ -128,7 +128,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="publisher">Nhà xuất bản</label>
                 <select className="form-control" id="publisher" name="publisher_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn nhà xuất bản ----</option>
-                    {publishers?.map(publisher => <option value={publisher?.id} selected={book?.publisher?.id === publisher.id}>{publisher?.name}</option>)}
+                    {data.publishers?.map(publisher => <option value={publisher?.id} selected={book?.publisher?.id === publisher.id}>{publisher?.name}</option>)}
                 </select>
             </div>
 
