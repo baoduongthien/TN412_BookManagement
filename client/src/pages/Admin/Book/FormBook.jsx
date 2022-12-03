@@ -12,7 +12,6 @@ import categoryService from '../../../services/categoryService';
 import publisherService from '../../../services/publisherService';
 
 function FormBook({ type, book }) {
-
     const [ data, setData ] = useState({});
 
     const navigate = useNavigate();
@@ -35,6 +34,7 @@ function FormBook({ type, book }) {
         initialValues: {
             name: type === 'detail' ? book.name : '',
             description: type === 'detail' ? book?.description : '',
+            price: type === 'detail' ? book?.price : 0,
             author_id: type === 'detail' ? (book?.author?.id ? `${book?.author?.id}` : null) : null,
             category_id: type === 'detail' ? (book?.category?.id ? `${book?.category?.id}` : null) : null,
             publisher_id: type === 'detail' ? (book?.publisher?.id ? `${book?.publisher?.id}` : null) : null,
@@ -42,9 +42,9 @@ function FormBook({ type, book }) {
         },
         validationSchema: Yup.object({
             name: Yup.string().required('Tên không được bỏ trống!').max(40, 'Tên không được quá 40 ký tự'),
+            price: Yup.number().min(0),
         }),
         onSubmit: function (values) {
-
             if (type === 'detail') {
                 handleEditBook(book.id, values);
             } else {
@@ -106,6 +106,12 @@ function FormBook({ type, book }) {
             <div className="form-group mt-2">
                 <label htmlFor="description">Mô tả</label>
                 <textarea type="text" className="form-control" id="description" name="description" value={formik.values.description} onChange={formik.handleChange} rows="2" placeholder="Mô tả..." />
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="price">Giá sách</label>
+                <input type="number" className="form-control" id="price" name="price" value={formik.values.price} onChange={formik.handleChange} placeholder="Giá..." />
+                {formik.errors.price && formik.touched.price && <p className="text-danger">{formik.errors.price}</p>}
             </div>
 
             <div className="form-group mt-2">

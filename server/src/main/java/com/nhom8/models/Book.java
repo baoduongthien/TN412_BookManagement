@@ -1,6 +1,7 @@
 package com.nhom8.models;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Entity
 @Table(name = "books")
@@ -14,6 +15,10 @@ public class Book {
 
     @Column
     private String description;
+
+    @Column
+    @Min(0)
+    private Long price;
 
     @Column
     private String thumbnail;
@@ -33,10 +38,11 @@ public class Book {
     public Book() {
     }
 
-    public Book(Long id, String name, String description, String thumbnail, Author author, Category category, Publisher publisher) {
+    public Book(Long id, String name, String description, Long price, String thumbnail, Author author, Category category, Publisher publisher) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.price = price;
         this.thumbnail = thumbnail;
         this.author = author;
         this.category = category;
@@ -65,6 +71,14 @@ public class Book {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getPrice() {
+        return this.price;
+    }
+
+    public void setPrice(Long price) {
+        this.price = price;
     }
 
     public String getThumbnail() {

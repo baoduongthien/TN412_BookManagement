@@ -36,13 +36,18 @@ const deleteBook = async(id) => {
     return await axiosJWT.delete(`/book/${id}`);
 }
 
+const searchBooks = async(name = '', currentPage = 0) => {
+    return await axiosJWT.get(`/books/search?name=${name}&page=${currentPage}`);
+}
+
 const bookService = {
     getBooks,
     getAllBooks,
     getBook,
     addBook,
     editBook,
-    deleteBook
+    deleteBook,
+    searchBooks
 };
 
 export default bookService;

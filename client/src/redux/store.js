@@ -12,7 +12,10 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import authReducer from './authSlice';
+
+import authReducer from './authSlice.js';
+import cartReducer from './cartSlice.js';
+
 
 const persistConfig = {
     key: 'root',
@@ -20,7 +23,10 @@ const persistConfig = {
     storage,
 };
 
-const rootReducer = combineReducers({ auth: authReducer });
+const rootReducer = combineReducers({
+    auth: authReducer,
+    cart: cartReducer,
+});
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({

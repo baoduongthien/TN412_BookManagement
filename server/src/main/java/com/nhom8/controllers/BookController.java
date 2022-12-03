@@ -51,13 +51,14 @@ public class BookController {
     public ResponseEntity<Book> createBook(
         @RequestParam @Valid String name,
         @RequestParam @Valid String description,
+        @RequestParam @Valid Long price,
         @RequestParam(required=false) String author_id,
         @RequestParam(required=false) String category_id, 
         @RequestParam(required=false) String publisher_id, 
         @RequestParam(required=false) MultipartFile image
     ) {
         try {            
-            return ResponseEntity.ok(bookService.createBook(name, description, author_id, category_id, publisher_id, image));
+            return ResponseEntity.ok(bookService.createBook(name, description, price, author_id, category_id, publisher_id, image));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -79,13 +80,14 @@ public class BookController {
         @PathVariable Long id, 
         @RequestParam @Valid String name, 
         @RequestParam @Valid String description,
+        @RequestParam @Valid Long price,
         @RequestParam(required=false) String author_id,
         @RequestParam(required=false) String category_id, 
         @RequestParam(required=false) String publisher_id, 
         @RequestParam(required=false) MultipartFile image
     ) {
         try {
-            return ResponseEntity.ok(bookService.editBook(id, name, description, author_id, category_id, publisher_id, image));
+            return ResponseEntity.ok(bookService.editBook(id, name, description, price, author_id, category_id, publisher_id, image));
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }
@@ -98,6 +100,15 @@ public class BookController {
             return ResponseEntity.ok(bookService.deleteBook(id));
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("/api/books/search")
+    public ResponseEntity<Page<Book>> searchBooks(@RequestParam String name, @RequestParam Optional<Integer> page, @RequestParam Optional<String> sortBy) {
+        try {
+            return ResponseEntity.ok(bookService.searchBooks(name, page, sortBy));
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

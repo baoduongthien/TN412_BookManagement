@@ -22,6 +22,10 @@ function Header() {
                         <Link className="nav-link" to="/">Trang chủ</Link>
                     </li>
 
+                    <li className="nav-item">
+                        <Link className="nav-link" to="/books">Sách</Link>
+                    </li>
+
                     {currentUser?.roles.some((role) => role === 'admin') ? (
                         <li className="nav-item">
                             <Link className="nav-link" to="/admin">Dashboard</Link>

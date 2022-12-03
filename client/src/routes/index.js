@@ -9,6 +9,7 @@ import Admin from '../pages/Admin';
 const publicRoutes = [
     { path: '/', component: Guest.Home, layout: GuestLayout },
     { path: '/books', component: Guest.BookList, layout: GuestLayout },
+    { path: '/cart', component: Guest.Cart, layout: GuestLayout },
 ];
 
 const authRoutes = [

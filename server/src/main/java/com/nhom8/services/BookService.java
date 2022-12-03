@@ -12,6 +12,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -79,7 +80,7 @@ public class BookService {
         }
     }
 
-    public Book createBook(String name, String description, String author_id, String category_id, String publisher_id, MultipartFile image) {
+    public Book createBook(String name, String description, Long price, String author_id, String category_id, String publisher_id, MultipartFile image) {
         
         String thumbnail = "";
         if (image != null && !image.isEmpty()) {
@@ -91,6 +92,7 @@ public class BookService {
 
         book.setName(name);
         book.setDescription(description);
+        book.setPrice(price);
         
         if (author_id != null) {
             Author author = authorRepository.findById(Long.parseLong(author_id)).get();
@@ -116,7 +118,7 @@ public class BookService {
         return bookRepository.findById(id).get();
     }
 
-    public Book editBook(Long id, String name, String description, String author_id, String category_id, String publisher_id, MultipartFile image) {
+    public Book editBook(Long id, String name, String description, Long price, String author_id, String category_id, String publisher_id, MultipartFile image) {
 
         Book book = bookRepository.findById(id).get();
         String thumbnail = book.getThumbnail();
@@ -128,6 +130,7 @@ public class BookService {
         
         book.setName(name);
         book.setDescription(description);
+        book.setPrice(price);
 
         if (author_id != null) {
             Author author = authorRepository.findById(Long.parseLong(author_id)).get();
@@ -156,5 +159,10 @@ public class BookService {
         bookRepository.delete(book);
 
         return book;
+    }
+
+    public Page<Book> searchBooks(String name, Optional<Integer> page, Optional<String> sortBy) {
+        Pageable pageable = PageRequest.of(page.orElse(0), 6, Sort.Direction.DESC, sortBy.orElse("id"));
+        return bookRepository.findByName(name, pageable);
     }
 }
