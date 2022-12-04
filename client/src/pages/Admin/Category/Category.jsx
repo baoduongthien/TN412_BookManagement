@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import categoryService from '../../../services/categoryService.js';
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
+import axiosJWT from '../../../helpers/axiosJWT.js';
 
 import Pagination from '../../../components/Pagination/Pagination.jsx';
 
@@ -22,6 +23,13 @@ function Category() {
         content: 'Tên danh mục',
         state: false,
         entity: null,
+    });
+
+    axiosJWT.interceptors.request.use((config) => {
+        const accessToken = JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth).login.currentUser?.accessToken;
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        
+        return config;
     });
 
     // get data

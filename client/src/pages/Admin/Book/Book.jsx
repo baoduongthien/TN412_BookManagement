@@ -7,6 +7,7 @@ import Pagination from '../../../components/Pagination/Pagination.jsx';
 import { Link } from 'react-router-dom';
 import FormModal from '../../../components/FormModal/FormModal.jsx';
 import { toastConfig } from '../../../configs/toastConfig.js';
+import axiosJWT from '../../../helpers/axiosJWT.js';
 
 function Author() {
    
@@ -22,6 +23,13 @@ function Author() {
         content: '',
         state: false,
         entity: null,
+    });
+
+    axiosJWT.interceptors.request.use((config) => {
+        const accessToken = JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth).login.currentUser?.accessToken;
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        
+        return config;
     });
 
     // get data

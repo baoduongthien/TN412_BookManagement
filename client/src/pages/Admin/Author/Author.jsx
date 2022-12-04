@@ -6,6 +6,7 @@ import authorService from '../../../services/authorService.js';
 import { toastConfig } from '../../../configs/toastConfig.js';
 import FormModal from '../../../components/FormModal';
 import Pagination from '../../../components/Pagination/Pagination.jsx';
+import axiosJWT from '../../../helpers/axiosJWT.js';
 
 function Author() {
 
@@ -13,7 +14,6 @@ function Author() {
 
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPages, setTotalPages] = useState(-1);
-    const [isLoading, setIsLoading] = useState(true);
 
     const [recallAPI, setToRecallAPI] = useState(false);
     const [modalState, setModalState] = useState({
@@ -24,19 +24,22 @@ function Author() {
         entity: null,
     });
 
+    axiosJWT.interceptors.request.use((config) => {
+        const accessToken = JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth).login.currentUser?.accessToken;
+        config.headers.Authorization = `Bearer ${accessToken}`;
+
+        return config;
+    });
+
     // get data
     useEffect(() => {
         (async function getData() {
             try {
-                setIsLoading(true);
-
                 const data = await authorService.getAuthors(currentPage);
 
-                setIsLoading(false);
                 setTotalPages(() => data.totalPages);
                 setAuthors(data.content);
             } catch (error) {
-                setIsLoading(false);
                 console.log(error);
             }
         })();
@@ -137,28 +140,21 @@ function Author() {
                     </tr>
                 </thead>
                 <tbody>
-                    {isLoading ? (
-                        <tr>
-                            <td colSpan={3} className="text-center">Đang tải dữ liệu...</td>
-                        </tr>
-                    ) : (
-                        <>
-                            {authors.length > 0 ? authors.map((author, index) => (
-                                <tr key={index}>
-                                    <th scope="row">{index + currentPage * 5 + 1}</th>
-                                    <td>{author.name}</td>
 
-                                    <td>
-                                        <button onClick={(e) => showEditModal(e)} data-id={author.id} data-name={author.name} className="btn btn-outline-primary">Sửa</button>
-                                        <button onClick={(e) => showDeleteModal(e)} data-id={author.id} data-name={author.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
-                                    </td>
-                                </tr>
-                            )) : (
-                                <tr>
-                                    <td colSpan={3} className="text-center">Không có tác giả</td>
-                                </tr>
-                            )}
-                        </>
+                    {authors.length > 0 ? authors.map((author, index) => (
+                        <tr key={index}>
+                            <th scope="row">{index + currentPage * 5 + 1}</th>
+                            <td>{author.name}</td>
+
+                            <td>
+                                <button onClick={(e) => showEditModal(e)} data-id={author.id} data-name={author.name} className="btn btn-outline-primary">Sửa</button>
+                                <button onClick={(e) => showDeleteModal(e)} data-id={author.id} data-name={author.name} className="btn btn-danger" style={{ marginLeft: '4px' }}>Xóa</button>
+                            </td>
+                        </tr>
+                    )) : (
+                        <tr>
+                            <td colSpan={3} className="text-center">Không có tác giả</td>
+                        </tr>
                     )}
 
                 </tbody>

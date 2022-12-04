@@ -118,7 +118,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="author">Tác giả</label>
                 <select className="form-control" id="author" name="author_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn tác giả ----</option>
-                    {data.authors?.map(author => <option value={author?.id} selected={book?.author?.id === author.id}>{author?.name}</option>)}
+                    {data.authors?.map((author, index) => <option key={index} value={author?.id} selected={book?.author?.id === author.id}>{author?.name}</option>)}
                 </select>
             </div>
 
@@ -126,7 +126,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="category">Danh mục</label>
                 <select className="form-control" id="category" name="category_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn danh mục ----</option>
-                    {data.categories?.map(category => <option value={category?.id} selected={book?.category?.id === category.id}>{category?.name}</option>)}
+                    {data.categories?.map((category, index) => <option key={index} value={category?.id} selected={book?.category?.id === category.id}>{category?.name}</option>)}
                 </select>
             </div>
 
@@ -134,7 +134,7 @@ function FormBook({ type, book }) {
                 <label htmlFor="publisher">Nhà xuất bản</label>
                 <select className="form-control" id="publisher" name="publisher_id" onChange={formik.handleChange}>
                     <option value="0">---- Chọn nhà xuất bản ----</option>
-                    {data.publishers?.map(publisher => <option value={publisher?.id} selected={book?.publisher?.id === publisher.id}>{publisher?.name}</option>)}
+                    {data.publishers?.map((publisher, index) => <option key={index} value={publisher?.id} selected={book?.publisher?.id === publisher.id}>{publisher?.name}</option>)}
                 </select>
             </div>
 

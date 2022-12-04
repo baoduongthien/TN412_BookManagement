@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import publisherService from '../../../services/publisherService.js'
 import FormModal from '../../../components/FormModal';
 import { toastConfig } from '../../../configs/toastConfig.js';
+import axiosJWT from '../../../helpers/axiosJWT.js';
 
 import Pagination from '../../../components/Pagination/Pagination.jsx';
 
@@ -24,6 +25,13 @@ function Publisher() {
         entity: null,
     });
 
+    axiosJWT.interceptors.request.use((config) => {
+        const accessToken = JSON.parse(JSON.parse(localStorage.getItem('persist:root')).auth).login.currentUser?.accessToken;
+        config.headers.Authorization = `Bearer ${accessToken}`;
+        
+        return config;
+    });
+    
     // get data
     useEffect(() => {
         (async function getData() {
