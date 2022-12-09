@@ -143,7 +143,7 @@ function FormBook({ type, book }) {
                 <input type="file" accept="image/*" className="form-control-file" id="image" name="image" style={{display: 'none'}} onChange={handleChangeImage} />
             </div>
 
-            {formik.values.image ? <img src={formik.values.image.preview} alt="book"/> : type === 'detail' ? <img src={`http://localhost:8080/images/${book?.thumbnail}`} alt="book" /> : null}
+            {formik.values.image ? <img src={formik.values.image.preview} alt="book" style={{maxWidth: '400px'}} /> : type === 'detail' ? <img src={`http://localhost:8080/images/${book?.thumbnail}`} alt="book" style={{maxWidth: '400px'}} /> : null}
 
             <div className="form-group mt-2">
                 <input type="submit" className="btn btn-primary" value={`${type === 'detail' ? 'Sửa' : 'Thêm'} sách`} />

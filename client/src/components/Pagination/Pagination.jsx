@@ -51,8 +51,6 @@ function Pagination({
         <nav aria-label="Page navigation">
             <ul className="pagination">
 
-                <li className="page-item"><button className="page-link" onClick={() => handleClick(0)}>{'<<'}</button></li>
-
                 <li className="page-item">
                     <button
                         className={`page-link ${currentPage === 0 ? 'disabled' : ''}`}
@@ -85,7 +83,6 @@ function Pagination({
                     </button>
                 </li>
 
-                <li className="page-item"><button className="page-link" onClick={() => handleClick(totalPages - 1)}>{'>>'}</button></li>
             </ul>
         </nav>
     );

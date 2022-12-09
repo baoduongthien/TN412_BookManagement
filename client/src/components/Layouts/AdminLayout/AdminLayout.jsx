@@ -8,8 +8,8 @@ function AdminLayout({ children }) {
         <>
             <Header />
 
-            <div className="container-fluid">
-                <div className="row">
+            <div className="container-fluid" style={{minHeight: 'calc(100vh - 100px)'}}>
+                <div className="row" style={{minHeight: 'calc(100vh - 100px)'}}>
                     <div className="col-2 p-0">
                         <Sidebar />
                     </div>

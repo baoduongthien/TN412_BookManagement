@@ -7,7 +7,7 @@ function GuestLayout({ children }) {
         <>
             <Header />
 
-            <div className="container">
+            <div className="container" style={{minHeight: 'calc(100vh - 100px)'}}>
                 {children}
             </div>
 

@@ -9,7 +9,7 @@ function SearchBook({ name, setName, setCurrentPage }) {
     return (
         <>
             <form>
-                <label htmlFor="name">Tên sách: </label>
+                <label htmlFor="name" style={{marginRight: '4px'}}>Tên sách: </label>
                 <input type="text" id="name" placeholder="Tìm theo tên sách..." value={name} onChange={(e) => handleChange(e)} />
             </form>
         </>

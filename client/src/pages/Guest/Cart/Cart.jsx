@@ -37,7 +37,7 @@ function Cart() {
     }
 
     return (
-        <>
+        <div className="pb-4 pt-4">
             <h1>Giỏ hàng</h1>
             <h4>Tổng số sản phẩm {cart.length}</h4>
             <table className="table">
@@ -56,7 +56,7 @@ function Cart() {
                         <tr key={index}>
                             <th scope="row">{index + 1}</th>
                             <th>
-                                <img src={book.thumbnail} alt="book" />
+                                <img src={book.thumbnail} alt="book" style={{maxWidth: '200px', maxHeight: '200px'}} />
                             </th>
                             <td>{book.name}</td>
 
@@ -79,7 +79,7 @@ function Cart() {
             { cart.length > 0 && <h4>Thành tiền: {total}</h4>}
             { cart.length > 0 && <button className="btn btn-primary" onClick={() => alert('Chức năng đang phát triển')}>Thanh toán</button>}
             <Link to="/books" className="btn btn-outline-primary" style={{marginLeft: '4px'}}>Quay lại</Link>
-        </>
+        </div>
     );
 }
 
